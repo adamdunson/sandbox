@@ -2,37 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <limits.h>
-
-char *dec2base(int dec, int base) {
-	char symbols[] = {
-			'0', '1', '2', '3', '4', '5',
-			'6', '7', '8', '9', 'A', 'B',
-			'C', 'D', 'E', 'F', 'G', 'H',
-			'I', 'J', 'K', 'L', 'M', 'N',
-			'O', 'P', 'Q', 'R', 'S', 'T',
-			'U', 'V', 'W', 'X', 'Y', 'Z'
-		};
-	char *buf, *tmp = (char *)calloc(1, sizeof(char));
-	int r = 0, q = dec;
-	int i = 0, j = 0;
-
-	while (q != 0) {
-		tmp = realloc(tmp, (sizeof(tmp) + 1) * sizeof(char));
-		r = q % base;
-		q /= base;
-
-		tmp[i] = symbols[r];
-		tmp[++i] = 0;
-	}
-
-	buf = (char *)malloc(sizeof(tmp));
-	while(i >= 0) {
-		buf[j++] = tmp[--i];
-	}
-	free(tmp);
-
-	return buf;
-}
+#include "toolbox.h"
 
 void printUsage() {
 	printf("Usage: dec2base [-b|--base base] input\n");
@@ -43,6 +13,7 @@ int main(int argc, char **argv) {
 	char *buf;
 	int i = 1;
 
+  /* begin parse input */
 	if (argc > 1) {
 		if (argc == 2 || (argc == 4 && (strcmp(argv[1], "-b")==0 || strcmp(argv[1], "--base")==0))) {
 			if (argc == 4) {
@@ -85,6 +56,7 @@ int main(int argc, char **argv) {
 		printUsage();
 		exit(EXIT_FAILURE);
 	}
+  /* end parse input */
 
 	buf = dec2base(dec, base);
 	printf("%s\n", buf);
